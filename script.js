@@ -1,33 +1,29 @@
+let data =
+	'[{"info":"CutGrass","status":false},{"info":"CleanRoom","status":false},{"info":"Gotogym","status":false},{"info":"MakeDinner","status":false}]';
 
-  let data = '{"tasks":{"Cut Grass":true,"Clean Room":false,"Go to Gym":true,"Make Dinner":false}}';
+let dataJSON = JSON.parse(data);
 
-  let dataJSON = JSON.parse(data);
+let output = document.getElementById('output');
+let taskList = document.querySelector('#taskList');
+for (let key in dataJSON) {
+	console.log(key, dataJSON[key]);
+	let status = dataJSON[key].status ? 'checked' : '';
+	let html = '<li>' + dataJSON[key].info + '<input type = "checkbox" value = "' + key + '" ' + status + '>  </li>';
+	taskList.innerHTML += html;
+}
 
-  let output = document.getElementById('output');
-  let taskList = document.querySelector('#taskList');
+addEvents();
 
-  for (let key in dataJSON.tasks) {
-    console.log(key, dataJSON.tasks[key])
-    let status =  !dataJSON.tasks[key] ? '' : 'checked'
-    let html = '<li>'+ key + '<input type = "checkbox" value = "'+key+'" '+ status +'>  </li>';
-    taskList.innerHTML += html;
-    
-  }
+function addEvents() {
+	let checkBoxes = document.querySelectorAll('#taskList input[type = "checkbox"]');
+	for (let index in checkBoxes) {
+		checkBoxes[index].onchange = updateJSON;
+	}
+	console.log(checkBoxes);
+}
 
-  addEvents();
-
-  function addEvents(){
-    let checkBoxes = document.querySelectorAll('#taskList input[type = "checkbox"]');
-   for(let index in checkBoxes) {
-     checkBoxes[index].onchange = updateJSON;
-   }
-   console.log(checkBoxes);
-  }
-
-  function updateJSON() {
-    let key = event.target.value;
-    console.log(key, event.target.checked)
-    dataJSON.tasks[key] = event.target.checked
-  }
-
-  console.log(dataJSON) 
+function updateJSON() {
+	let key = event.target.value;
+	console.log(key, event.target.checked);
+	dataJSON[key].status = event.target.checked;
+}
